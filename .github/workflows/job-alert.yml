@@ -1,15 +1,13 @@
-name: Job Scraper
+name: Job Email Test
 
 on:
-  schedule:
-    - cron: '0 8 * * *'  # Runs daily at 08:00 UTC
-  workflow_dispatch:
+  workflow_dispatch:  # lets you trigger manually
 
 jobs:
-  run-script:
+  test-email:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -18,12 +16,11 @@ jobs:
           python-version: 3.10
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install --upgrade pip
 
-      - name: Run job scraper
+      - name: Run email test
         env:
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        run: |
-          python your_script_name.py
+        run: python job_scraper.py
